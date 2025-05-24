@@ -13,14 +13,14 @@ namespace ProductService.Extensions
     {
         public static void ConfigureProductRepository(this IServiceCollection service)
         {
-            service.AddScoped<IProductRepository, ProductRepository>();
+            service.AddScoped<IProductRepository, Repository.ProductRepository>();
         }
 
         public static void ConfigureSqlContext(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddDbContext<ProductRepositoryContext>(opt =>
             {
-                opt.UseSqlServer(configuration.GetConnectionString("sqlConnection"), b => b.MigrationsAssembly("ProductService"));
+                opt.UseSqlServer(configuration.GetConnectionString("sqlConnection"));
             });
         }
 

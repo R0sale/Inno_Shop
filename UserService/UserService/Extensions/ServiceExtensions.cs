@@ -21,8 +21,7 @@ namespace UserService.Extensions
         {
             service.AddDbContext<UserRepositoryContext>(opt =>
             {
-                opt.UseSqlServer(configuration.GetConnectionString("sqlConnection"),
-                    b => b.MigrationsAssembly("UserService"));
+                opt.UseSqlServer(configuration.GetConnectionString("sqlConnection"));
             });
         }
 
