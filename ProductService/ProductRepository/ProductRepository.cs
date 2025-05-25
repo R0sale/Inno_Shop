@@ -25,6 +25,11 @@ namespace Repository
             return PagedList<Product>.ToPagedList(products, productParams.CurrentPage, productParams.PageSize);
         }
 
+        public async Task<IEnumerable<Product>> GetUsersProducts(string ownerId)
+        {
+            return await FindByCondition(p => p.OwnerId.ToString().Equals(ownerId), false).ToListAsync();
+        }
+
         public async Task<Product> GetProduct(Guid id, bool trackChanges)
         {
             var product = await FindByCondition(p => p.Id.Equals(id), trackChanges).SingleOrDefaultAsync();

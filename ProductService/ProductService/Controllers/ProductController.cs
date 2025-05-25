@@ -45,7 +45,7 @@ namespace ProductService.Controllers
         [Authorize]
         public async Task<IActionResult> CreateProduct([FromBody] ProductForCreationDTO productForCreation)
         {
-            var productDTO = await _sender.Send(new CreateProductCommand(productForCreation));
+            var productDTO = await _sender.Send(new CreateProductCommand(productForCreation, User));
 
             return CreatedAtRoute("ProductById", new { id = productDTO.Id }, productDTO);
         }
@@ -55,6 +55,15 @@ namespace ProductService.Controllers
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             await _sender.Send(new DeleteProductCommand(id, User, false));
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteUsersProducts()
+        {
+            await _sender.Send(new DeleteUsersProductsCommand(User));
 
             return NoContent();
         }

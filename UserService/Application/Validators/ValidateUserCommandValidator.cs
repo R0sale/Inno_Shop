@@ -14,8 +14,13 @@ namespace Application.Validators
     {
         public ValidateUserCommandValidator()
         {
-            RuleFor(u => u.UserForAuth.UserName).NotEmpty().MinimumLength(5).MaximumLength(20);
-            RuleFor(u => u.UserForAuth.Password).NotEmpty().MinimumLength(5).MaximumLength(10);
+            RuleFor(c => c.UserForAuth.UserName).NotEmpty()
+                .WithMessage("UserName is a reqired field")
+                .MaximumLength(20).WithMessage("UserName can't be more than 20 characters")
+                .MinimumLength(5).WithMessage("UserName can't be less than 5 characters");
+            RuleFor(c => c.UserForAuth.Password).NotEmpty().WithMessage("Password is a reqired field")
+                .MinimumLength(5).WithMessage("Password can't be less than 5 characters")
+                .MaximumLength(10).WithMessage("Password can't be more than 10 characters");
         }
 
         public override ValidationResult Validate(ValidationContext<ValidateUserCommand> context)

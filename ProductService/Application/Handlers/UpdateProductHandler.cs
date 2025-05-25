@@ -7,6 +7,7 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,20 +30,18 @@ namespace Application.Handlers
 
         public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellation)
         {
+            if (request.User.Identity.Name is null)
+                throw new ClaimsPrincipalNameNullException();
+
+            var ownerId = request.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (ownerId is null)
+                throw new ClaimsPrincipalIdNullException();
+
             var product = await _validation.CheckAndFindIfProductExists(request.Id, request.TrackChanges);
 
-            var user = await _client.GetUser(product.OwnerId);
-
-            if (user.UserName is null)
-                throw new UserNotFoundException(user.Id);
-
-            if (!user.UserName.Equals(request.User.Identity.Name))
-                throw new UserNotCorrespondException(user.Id);
-
-            var newOwner = await _client.GetUser(request.ProductForUpd.OwnerId);
-
-            if (newOwner.UserName is null)
-                throw new UserNotFoundException(user.Id);
+            if (!product.OwnerId.ToString().Equals(ownerId))
+                throw new UserNotCorrespondException(new Guid(ownerId));
 
             _mapper.Map(request.ProductForUpd, product);
             await _repository.SaveAsync();

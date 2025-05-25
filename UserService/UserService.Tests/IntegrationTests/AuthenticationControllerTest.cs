@@ -62,13 +62,13 @@ namespace UserService.Tests.IntegrationTests
         }
 
         [Fact]
-        public async Task RegisterUser_WithNull_ReturnsBadRequest()
+        public async Task RegisterUser_WithNull_ReturnsUnprocessableEntity()
         {
             UserDTO dto = null;
 
             var response = await _client.PostAsJsonAsync("/api/authentication", dto);
 
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.UnprocessableEntity);
         }
 
         [Fact]

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entities.Exceptions
 {
-    public class UserNotCorrespondException : BadRequestException
+    public class ServiceUnavailableException : Exception
     {
-        public UserNotCorrespondException(Guid id) : base($"User with id {id} don't have this product")
+        public ServiceUnavailableException() : base("Can't connect to another service")
         { }
     }
 }

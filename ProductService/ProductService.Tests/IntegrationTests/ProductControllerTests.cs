@@ -92,7 +92,6 @@ namespace ProductService.Tests.IntegrationTests
                 Accessibility = true,
                 Price = 200.50m,
                 CreationDate = DateTime.UtcNow,
-                OwnerId = new Guid("3b6e3995-056a-4c52-a65a-a5d419e23783")
             };
 
             var token = JwtTokenGenerator.GenerateJwt();

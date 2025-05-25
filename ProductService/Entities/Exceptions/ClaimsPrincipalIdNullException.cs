@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entities.Exceptions
 {
-    public class UserNotCorrespondException : BadRequestException
+    public sealed class ClaimsPrincipalIdNullException : BadRequestException
     {
-        public UserNotCorrespondException(Guid id) : base($"User with id {id} don't have this product")
+        public ClaimsPrincipalIdNullException() : base("Id of ClaimsPrincipal is null")
         { }
     }
 }

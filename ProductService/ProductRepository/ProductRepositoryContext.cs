@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Entities.Models;
-using Repository.Configurations;
 using System.Reflection.Emit;
 
 namespace Repository
@@ -16,7 +15,6 @@ namespace Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
         }
 
         public DbSet<Product> Products { get; set; }

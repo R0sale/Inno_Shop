@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Entities.Models;
 using Entities.Exceptions;
+using System.Security.Claims;
 
 namespace Application.Handlers
 {
@@ -28,6 +29,13 @@ namespace Application.Handlers
         public async Task<ProductDTO> Handle(CreateProductCommand request, CancellationToken cancellation)
         {
             var product = _mapper.Map<Product>(request.productForCreation);
+
+            var ownerId = request.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (ownerId is null)
+                throw new ClaimsPrincipalIdNullException();
+
+            product.OwnerId = new Guid(ownerId);
 
             _repository.CreateProductRep(product);
             await _repository.SaveAsync();

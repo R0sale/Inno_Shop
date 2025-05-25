@@ -15,7 +15,6 @@ namespace Application.Validators
         {
             RuleFor(p => p.productForCreation.Description).NotEmpty().WithMessage("Description can't be empty");
             RuleFor(p => p.productForCreation.CreationDate).NotEmpty().WithMessage("CreationDate can't be empty");
-            RuleFor(p => p.productForCreation.OwnerId).NotEmpty().WithMessage("OwnerId can't be empty");
             RuleFor(p => p.productForCreation.Price).NotEmpty().WithMessage("Price can't be empty");
             RuleFor(p => p.productForCreation.Name).NotEmpty().WithMessage("Name can't be empty").MinimumLength(5).WithMessage("Length of the namr can't be less than 5").MaximumLength(20).WithMessage("Length of the name can't be more than 20");
             RuleFor(p => p.productForCreation.Accessibility).NotEmpty().WithMessage("Accessibility can't be empty");

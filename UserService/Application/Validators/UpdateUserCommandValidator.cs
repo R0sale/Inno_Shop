@@ -14,11 +14,19 @@ namespace Application.Validators
     {
         public UpdateUserCommandValidator()
         {
-            RuleFor(c => c.UserForUpd.Email).NotEmpty().EmailAddress();
-            RuleFor(c => c.UserForUpd.UserName).NotEmpty().MaximumLength(20).MinimumLength(5);
-            RuleFor(c => c.UserForUpd.FirstName).NotEmpty().MaximumLength(20).MinimumLength(5);
-            RuleFor(c => c.UserForUpd.LastName).NotEmpty().MaximumLength(20).MinimumLength(5);
-            RuleFor(c => c.UserForUpd.Roles).NotEmpty();
+            RuleFor(c => c.UserForUpd.Email).NotEmpty().WithMessage("Email is a reqired field").EmailAddress();
+            RuleFor(c => c.UserForUpd.UserName).NotEmpty()
+                .WithMessage("UserName is a reqired field")
+                .MaximumLength(20).WithMessage("UserName can't be more than 20 characters")
+                .MinimumLength(5).WithMessage("UserName can't be less than 5 characters");
+            RuleFor(c => c.UserForUpd.FirstName).NotEmpty()
+                .WithMessage("FirstName is a reqired field")
+                .MaximumLength(20).WithMessage("FirstName can't be more than 20 characters")
+                .MinimumLength(5).WithMessage("FirstName can't be less than 5 characters");
+            RuleFor(c => c.UserForUpd.LastName).NotEmpty().WithMessage("LastName is a reqired field")
+                .MaximumLength(20).WithMessage("LastName can't be more than 20 characters")
+                .MinimumLength(5).WithMessage("LastName can't be less than 5 characters");
+            RuleFor(c => c.UserForUpd.Roles).NotEmpty().WithMessage("Roles is a reqired field");
         }
 
         public override ValidationResult Validate(ValidationContext<UpdateUserCommand> context)

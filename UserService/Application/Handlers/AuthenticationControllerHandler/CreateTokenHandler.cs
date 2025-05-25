@@ -7,75 +7,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Entities.Exceptions;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Application.Commands.AuthenticationCommands;
+using Application.Contracts;
 
 namespace Application.Handlers.AuthenticationControllerHandler
 {
     class CreateTokenHandler : IRequestHandler<CreateTokenCommand, string>
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _config;
+        private readonly ICreateTokenService _createTokenService;
 
-        public CreateTokenHandler(UserManager<User> userManager, IConfiguration config)
+        public CreateTokenHandler(ICreateTokenService createTokenService)
         {
-            _userManager = userManager;
-            _config = config;
+            _createTokenService = createTokenService;
         }
 
-        public async Task<string> Handle(CreateTokenCommand request, CancellationToken cancellationToken)
-        {
-            var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims(request.UserName);
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
-
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-        }
-
-        private SigningCredentials GetSigningCredentials()
-        {
-            var jwtSettings = _config.GetSection("JwtSettings");
-            var key = jwtSettings["secretkey"];
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-
-            return new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-        }
-
-        private async Task<List<Claim>> GetClaims(string userName)
-        {
-            var user = await _userManager.FindByNameAsync(userName);
-
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, user.UserName)
-            };
-
-            var roles = await _userManager.GetRolesAsync(user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            return claims;
-        }
-
-        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
-        {
-            var jwtSettings = _config.GetSection("JwtSettings");
-
-            var tokenOptions = new JwtSecurityToken
-            (
-                issuer: jwtSettings["validIssuer"],
-                audience: jwtSettings["validAudience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
-                signingCredentials: signingCredentials
-            );
-
-            return tokenOptions;
-        }
+        public async Task<string> Handle(CreateTokenCommand request, CancellationToken cancellationToken) => await _createTokenService.CreateTokenAsync(request.UserName);
 
     }
 }

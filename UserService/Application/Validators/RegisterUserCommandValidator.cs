@@ -14,12 +14,22 @@ namespace Application.Validators
     {
         public RegisterUserCommandValidator()
         {
-            RuleFor(u => u.UserForRegistration.Email).NotEmpty().EmailAddress();
-            RuleFor(u => u.UserForRegistration.UserName).NotEmpty().MaximumLength(20).MinimumLength(5);
-            RuleFor(u => u.UserForRegistration.FirstName).NotEmpty().MaximumLength(20).MinimumLength(5);
-            RuleFor(u => u.UserForRegistration.LastName).NotEmpty().MaximumLength(20).MinimumLength(5);
-            RuleFor(u => u.UserForRegistration.Roles).NotEmpty();
-            RuleFor(u => u.UserForRegistration.Password).NotEmpty().MaximumLength(10).MinimumLength(5);
+            RuleFor(c => c.UserForRegistration.Email).NotEmpty().WithMessage("Email is a reqired field").EmailAddress();
+            RuleFor(c => c.UserForRegistration.UserName).NotEmpty()
+                .WithMessage("UserName is a reqired field")
+                .MaximumLength(20).WithMessage("UserName can't be more than 20 characters")
+                .MinimumLength(5).WithMessage("UserName can't be less than 5 characters");
+            RuleFor(c => c.UserForRegistration.FirstName).NotEmpty()
+                .WithMessage("FirstName is a reqired field")
+                .MaximumLength(20).WithMessage("FirstName can't be more than 20 characters")
+                .MinimumLength(5).WithMessage("FirstName can't be less than 5 characters");
+            RuleFor(c => c.UserForRegistration.LastName).NotEmpty().WithMessage("LastName is a reqired field")
+                .MaximumLength(20).WithMessage("LastName can't be more than 20 characters")
+                .MinimumLength(5).WithMessage("LastName can't be less than 5 characters");
+            RuleFor(c => c.UserForRegistration.Roles).NotEmpty().WithMessage("Roles is a reqired field");
+            RuleFor(c => c.UserForRegistration.Password).NotEmpty().WithMessage("Password is a reqired field")
+                .MinimumLength(5).WithMessage("Password can't be less than 5 characters")
+                .MaximumLength(10).WithMessage("Password can't be more than 10 characters");
         }
 
         public override ValidationResult Validate(ValidationContext<RegisterUserCommand> context)

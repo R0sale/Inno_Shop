@@ -14,8 +14,10 @@ namespace Application.Validators
     {
         public SendChangePasswordEmailNotificationValidator()
         {
-            RuleFor(u => u.User.Email).NotEmpty().EmailAddress();
-            RuleFor(u => u.User.NewPassword).NotEmpty().MinimumLength(5).MaximumLength(10);
+            RuleFor(c => c.User.Email).NotEmpty().WithMessage("Email is a reqired field").EmailAddress();
+            RuleFor(c => c.User.NewPassword).NotEmpty().WithMessage("Password is a reqired field")
+                .MinimumLength(5).WithMessage("Password can't be less than 5 characters")
+                .MaximumLength(10).WithMessage("Password can't be more than 10 characters");
         }
 
         public override ValidationResult Validate(ValidationContext<SendChangePasswordEmailNotification> context)

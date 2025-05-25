@@ -91,6 +91,7 @@ namespace ProductService.Tests.UnitTests
         public async Task CreateProductTest()
         {
             var now = DateTime.Now;
+            var id = Guid.NewGuid();
 
             var testCreationProduct = new ProductForCreationDTO
             {
@@ -99,7 +100,6 @@ namespace ProductService.Tests.UnitTests
                 CreationDate = now,
                 Accessibility = true,
                 Description = "dadada",
-                OwnerId = Guid.NewGuid()
             };
 
             var testProduct = new ProductDTO
@@ -110,11 +110,22 @@ namespace ProductService.Tests.UnitTests
                 CreationDate = now,
                 Accessibility = true,
                 Description = "dadada",
-                OwnerId = Guid.NewGuid()
+                OwnerId = id
             };
 
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, id.ToString())
+            };
+
+            var identity = new ClaimsIdentity(claims, "Test");
+            var User = new ClaimsPrincipal(identity);
+
             var mockSender = new Mock<ISender>();
-            mockSender.Setup(s => s.Send(new CreateProductCommand(testCreationProduct), new CancellationToken()))
+            mockSender.Setup(s => s.Send(It.Is<CreateProductCommand>(cmd =>
+            cmd.productForCreation.Name == testCreationProduct.Name &&
+            cmd.productForCreation.Description == testCreationProduct.Description
+        ), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(testProduct);
             var controller = new ProductController(mockSender.Object);
 

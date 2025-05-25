@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 using FluentValidation;
 using Application.Behaviors;
+using Application.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddAutoMapper(typeof(Application.AssemblyReferense).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyReferense).Assembly));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>),
 typeof(ValidationBehavior<,>));
+builder.Services.AddHttpClient<IHttpClient, UserClient>();
+builder.Services.ConfigureCreateTokenService();
 builder.Services.ConfigureEmailService();
 builder.Services.AddValidatorsFromAssembly(typeof(Application.AssemblyReferense).Assembly);
 
@@ -43,7 +46,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<UserRepositoryContext>();
-    context.Database.Migrate();
+    if (!context.Database.IsInMemory())
+        context.Database.Migrate();
 }
 
 app.UseRouting();

@@ -1,4 +1,6 @@
+using Application.Behaviors;
 using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureProductRepository();
 builder.Services.AddAutoMapper(typeof(Application.AssemblyReference).Assembly);
 builder.Services.ConfigureMediatR();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>),
+typeof(ValidationBehavior<,>));
 builder.Services.AddValidatorsFromAssembly(typeof(Application.AssemblyReference).Assembly);
 
 builder.Services.ConfigureValidationService();
@@ -46,7 +50,8 @@ app.ConfigureExceptionHandler();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ProductRepositoryContext>();
-    context.Database.Migrate();
+    if (!context.Database.IsInMemory())
+        context.Database.Migrate();
 }
 
 if (app.Environment.IsProduction())

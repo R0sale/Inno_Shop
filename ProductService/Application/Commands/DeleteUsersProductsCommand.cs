@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using MediatR;
+﻿using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +8,5 @@ using System.Threading.Tasks;
 
 namespace Application.Commands
 {
-    public record CreateProductCommand(ProductForCreationDTO productForCreation, ClaimsPrincipal User) : IRequest<ProductDTO>;
+    public record DeleteUsersProductsCommand(ClaimsPrincipal User) : IRequest<Unit>;
 }

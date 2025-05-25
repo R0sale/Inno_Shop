@@ -6,6 +6,7 @@ using Entities.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Security.Claims;
 
 namespace UserService.Extensions
 {
@@ -59,9 +60,15 @@ namespace UserService.Extensions
 
                         ValidIssuer = jwtSettings["validIssuer"],
                         ValidAudience = jwtSettings["validAudience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secretKey"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secretKey"])),
+                        NameClaimType = ClaimTypes.NameIdentifier
                     };
                 });
+        }
+
+        public static void ConfigureCreateTokenService(this IServiceCollection services)
+        {
+            services.AddScoped<ICreateTokenService, CreateTokenService>();
         }
 
     }

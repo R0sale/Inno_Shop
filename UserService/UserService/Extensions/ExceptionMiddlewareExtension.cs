@@ -20,6 +20,7 @@ namespace UserService.Extensions
                     {
                         context.Response.StatusCode = contextFeature.Error switch
                         {
+                            ServiceUnavailableException => StatusCodes.Status503ServiceUnavailable,
                             UnauthorizedException => StatusCodes.Status401Unauthorized,
                             BadRequestException => StatusCodes.Status400BadRequest,
                             ForbiddenException => StatusCodes.Status403Forbidden,

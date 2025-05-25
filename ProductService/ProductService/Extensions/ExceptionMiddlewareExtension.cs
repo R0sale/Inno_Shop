@@ -1,6 +1,7 @@
 ﻿using Entities.ErrorModel;
 using Entities.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Runtime.CompilerServices;
 
 namespace ProductService.Extensions
@@ -20,6 +21,7 @@ namespace ProductService.Extensions
                     {
                         context.Response.StatusCode = contextFeature.Error switch
                         {
+                            ValidationAppException => StatusCodes.Status422UnprocessableEntity,
                             ProductsNotFoundException => StatusCodes.Status404NotFound,
                             BadRequestException => StatusCodes.Status400BadRequest,
                             NotFoundException => StatusCodes.Status404NotFound,
