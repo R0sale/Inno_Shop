@@ -25,4 +25,8 @@
     <ProjectReference Include="..\ProductRepository\ProductRepository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
+  </ItemGroup>
+
 </Project>

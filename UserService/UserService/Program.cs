@@ -40,6 +40,12 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<UserRepositoryContext>();
+    context.Database.Migrate();
+}
+
 app.UseRouting();
 
 app.ConfigureExceptionHandler();

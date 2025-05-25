@@ -59,7 +59,11 @@ namespace UserService.Controllers
 
                 await _publisher.Publish(new UserConfirmingEmailNotification(user.Id.ToString()));
 
-                return Forbid("Your email is not confirmed");
+                return Unauthorized(new
+                {
+                    StatusCode = 401,
+                    Message = "Your email is not confirmed"
+                });
             }
 
             return Ok(new TokenResponse

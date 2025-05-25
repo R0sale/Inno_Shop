@@ -1,6 +1,7 @@
 ﻿using Application.Contracts;
 using Application.Dtos;
 using Application.Queries;
+using Entities.Exceptions;
 using Entities.Models;
 using Application.RequestFeatures;
 using AutoMapper;
@@ -27,6 +28,9 @@ namespace Application.Handlers
         public async Task<IEnumerable<ProductDTO>> Handle(GetAllProductsQuery request, CancellationToken cancellation)
         {
             var products = await _repository.GetAllProducts(request.Param ,request.TrackChanges);
+
+            if (products is null)
+                throw new ProductsNotFoundException();
 
             var productsDTO = _mapper.Map<IEnumerable<ProductDTO>>(products);
 

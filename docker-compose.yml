@@ -1,0 +1,59 @@
+services:
+  productservice:
+    build:
+      context: ./ProductService
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8081"
+    environment:
+    - ASPNETCORE_URLS=http://+:8081
+    depends_on:
+      - productdb
+    networks:
+      - sharednetwork
+    restart: on-failure
+
+  userservice:
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+    - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - userdb
+    networks:
+      - sharednetwork
+    restart: on-failure
+
+  productdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "ProductPassword123!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+    - productvolume:/var/opt/mssql
+    networks:
+      - sharednetwork
+
+  userdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "UserPassword123!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1434:1433"
+    volumes:
+    - uservolume:/var/opt/mssql
+    networks:
+      - sharednetwork
+
+networks:
+  sharednetwork:
+
+volumes:
+  productvolume:
+  uservolume:
