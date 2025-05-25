@@ -1,7 +1,7 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ProductService.ActionFilters;
 using ProductService.Extensions;
 using Repository;
 
@@ -10,11 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureProductRepository();
 builder.Services.AddAutoMapper(typeof(Application.AssemblyReference).Assembly);
 builder.Services.ConfigureMediatR();
+builder.Services.AddValidatorsFromAssembly(typeof(Application.AssemblyReference).Assembly);
 
 builder.Services.ConfigureValidationService();
-builder.Services.ConfigureValidationFilter();
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
+
+
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -32,6 +34,7 @@ else
 }
 
 builder.Services.ConfigureHttpClient();
+
 
 builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddAuthorization();

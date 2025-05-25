@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.AuthenticationCommands
 {
-    public record RegisterUserCommand(UserForRegistrationDTO userForRegistration) : IRequest<IdentityResult>;
+    public record RegisterUserCommand(UserForRegistrationDTO UserForRegistration) : IRequest<IdentityResult>;
 }

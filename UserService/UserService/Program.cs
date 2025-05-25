@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using UserService.ActionFilters;
 using UserService.Extensions;
 using Newtonsoft.Json;
 using UserRepository;
 using Microsoft.EntityFrameworkCore.InMemory;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
+using FluentValidation;
+using Application.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +14,12 @@ builder.Services.AddAuthorization();
 builder.Services.ConfigureIdentity();
 builder.Services.AddAutoMapper(typeof(Application.AssemblyReferense).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Application.AssemblyReferense).Assembly));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>),
+typeof(ValidationBehavior<,>));
 builder.Services.ConfigureEmailService();
+builder.Services.AddValidatorsFromAssembly(typeof(Application.AssemblyReferense).Assembly);
 
 builder.Services.ConfigureJWT(builder.Configuration);
-builder.Services.ConfigureValidationFilter();
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
 

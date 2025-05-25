@@ -5,7 +5,6 @@ using Application.Dtos;
 using Application.RequestFeatures;
 using System.ComponentModel.Design;
 using Microsoft.AspNetCore.JsonPatch;
-using ProductService.ActionFilters;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -43,7 +42,6 @@ namespace ProductService.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize]
         public async Task<IActionResult> CreateProduct([FromBody] ProductForCreationDTO productForCreation)
         {
@@ -62,7 +60,6 @@ namespace ProductService.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [Authorize]
         public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] ProductForUpdateDTO productForUpd)
         {

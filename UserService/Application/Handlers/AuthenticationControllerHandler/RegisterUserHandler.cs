@@ -31,11 +31,11 @@ namespace Application.Handlers.AuthenticationControllerHandler
         {
             var rolesExist = true;
 
-            var user = _mapper.Map<User>(request.userForRegistration);
+            var user = _mapper.Map<User>(request.UserForRegistration);
 
-            var result = await _userManager.CreateAsync(user, request.userForRegistration.Password);
+            var result = await _userManager.CreateAsync(user, request.UserForRegistration.Password);
 
-            foreach (var role in request.userForRegistration.Roles)
+            foreach (var role in request.UserForRegistration.Roles)
             {
                 if (!await _roleManager.RoleExistsAsync(role))
                     rolesExist = false;
@@ -43,7 +43,7 @@ namespace Application.Handlers.AuthenticationControllerHandler
 
             if (result.Succeeded && rolesExist)
             {
-                await _userManager.AddToRolesAsync(user, request.userForRegistration.Roles);
+                await _userManager.AddToRolesAsync(user, request.UserForRegistration.Roles);
             }
 
             return result;

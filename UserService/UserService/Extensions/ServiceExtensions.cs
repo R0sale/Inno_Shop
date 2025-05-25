@@ -6,7 +6,6 @@ using Entities.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using UserService.ActionFilters;
 
 namespace UserService.Extensions
 {
@@ -66,6 +65,5 @@ namespace UserService.Extensions
                 });
         }
 
-        public static void ConfigureValidationFilter(this IServiceCollection services) => services.AddScoped<ValidationFilter>();
     }
 }

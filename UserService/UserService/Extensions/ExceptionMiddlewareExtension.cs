@@ -1,6 +1,7 @@
 ﻿using Entities.ErrorModel;
 using Microsoft.AspNetCore.Diagnostics;
 using Entities.Exceptions;
+using System.Text.Json;
 
 namespace UserService.Extensions
 {
@@ -23,15 +24,27 @@ namespace UserService.Extensions
                             BadRequestException => StatusCodes.Status400BadRequest,
                             ForbiddenException => StatusCodes.Status403Forbidden,
                             NotFoundException => StatusCodes.Status404NotFound,
+                            ValidationAppException => StatusCodes.Status422UnprocessableEntity,
                             _ => StatusCodes.Status500InternalServerError
                         };
 
-                        await context.Response.WriteAsync(
-                            new ErrorDetails()
+                        if (contextFeature.Error is ValidationAppException exception)
+                        {
+                            await context.Response.WriteAsync(JsonSerializer.Serialize(new
                             {
-                                StatusCode = context.Response.StatusCode,
-                                Message = contextFeature.Error.Message
-                            }.ToString());
+                                exception.Errors
+                            }));
+
+                        }
+                        else
+                        {
+                            await context.Response.WriteAsync(
+                                new ErrorDetails()
+                                {
+                                    StatusCode = context.Response.StatusCode,
+                                    Message = contextFeature.Error.Message
+                                }.ToString());
+                        }
                     }
                 });
             });

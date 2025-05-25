@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Authorization;
-using UserService.ActionFilters;
 using Application.Contracts;
 using Application.Dtos;
 using Application.RequestFeatures;
@@ -53,7 +52,6 @@ namespace UserService.Controllers
 
 
         [HttpPut("{id:guid}")]
-        [ServiceFilter(typeof(ValidationFilter))]
         public async Task<IActionResult> UpdateUser([FromBody] UserForUpdateDTO userForUpdate)
         {
             await _sender.Send(new UpdateUserCommand(userForUpdate));

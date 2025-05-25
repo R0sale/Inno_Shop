@@ -1,7 +1,6 @@
 ﻿using Application.Contracts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using ProductService.ActionFilters;
 using Repository;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -23,8 +22,6 @@ namespace ProductService.Extensions
                 opt.UseSqlServer(configuration.GetConnectionString("sqlConnection"));
             });
         }
-
-        public static void ConfigureValidationFilter(this IServiceCollection service) => service.AddScoped<ValidationFilterAttribute>();
 
         public static void ConfigureHttpClient(this IServiceCollection service)
         {

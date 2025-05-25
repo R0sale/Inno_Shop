@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Application.Contracts;
 using Application.Dtos;
-using UserService.ActionFilters;
 using MediatR;
 using Application.Commands;
 using Application.Notifications;
@@ -27,7 +26,6 @@ namespace UserService.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ValidationFilter))]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDTO userForRegistration)
         {
             var result = await _sender.Send(new RegisterUserCommand(userForRegistration));
@@ -51,7 +49,6 @@ namespace UserService.Controllers
         }
 
         [HttpPost("login")]
-        [ServiceFilter(typeof(ValidationFilter))]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDTO userForAuth)
         {
             var isEmailConfirmed = await _sender.Send(new ValidateUserCommand(userForAuth));
@@ -84,7 +81,6 @@ namespace UserService.Controllers
         }
 
         [HttpPost("changePassword")]
-        [ServiceFilter(typeof(ValidationFilter))]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordUserDTO restoreUser)
         {
             await _publisher.Publish(new SendChangePasswordEmailNotification(restoreUser));
