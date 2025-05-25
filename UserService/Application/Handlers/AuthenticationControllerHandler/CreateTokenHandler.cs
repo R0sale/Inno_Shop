@@ -36,7 +36,8 @@ namespace Application.Handlers.AuthenticationControllerHandler
 
         private SigningCredentials GetSigningCredentials()
         {
-            var key = Environment.GetEnvironmentVariable("SECRET");
+            var jwtSettings = _config.GetSection("JwtSettings");
+            var key = jwtSettings["secretkey"];
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
             return new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);

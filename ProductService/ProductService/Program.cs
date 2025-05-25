@@ -43,6 +43,12 @@ var app = builder.Build();
 
 app.ConfigureExceptionHandler();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ProductRepositoryContext>();
+    context.Database.Migrate();
+}
+
 if (app.Environment.IsProduction())
     app.UseHsts();
 

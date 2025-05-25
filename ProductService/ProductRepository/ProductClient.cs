@@ -18,7 +18,7 @@ namespace Repository
 
         public async Task<UserDTO> GetUser(Guid id)
         {
-            var response = await _client.GetAsync($"https://localhost:7269/api/users/{id}");
+            var response = await _client.GetAsync($"http://userservice:8080/api/users/{id}");
 
             var user = await response.Content.ReadFromJsonAsync<UserDTO>();
 

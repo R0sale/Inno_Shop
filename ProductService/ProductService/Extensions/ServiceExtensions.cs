@@ -19,7 +19,7 @@ namespace ProductService.Extensions
         {
             service.AddDbContext<ProductRepositoryContext>(opt =>
             {
-                opt.UseSqlServer(configuration.GetConnectionString("sqlConnection"));
+                opt.UseSqlServer(configuration.GetConnectionString("sqlConnection"), sqlOptions => sqlOptions.EnableRetryOnFailure());
             });
         }
 
@@ -34,7 +34,6 @@ namespace ProductService.Extensions
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration config)
         {
             var jwtSettings = config.GetSection("JwtSettings");
-            var key = Environment.GetEnvironmentVariable("SECRET");
 
             services.AddAuthentication(opts =>
             {
@@ -52,7 +51,7 @@ namespace ProductService.Extensions
 
                         ValidIssuer = jwtSettings["validIssuer"],
                         ValidAudience = jwtSettings["validAudience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secretKey"]))
                     };
                 });
         }
