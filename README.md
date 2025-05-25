@@ -14,12 +14,16 @@ Technologies Used
 - Docker & Docker Compose
 
 UserService implements:
+- CQRS, and Clean Architecture with using Best Pricties.
+- Developing CQRS with using MediatR, FluentValidation.
 - RESTful API for reading, creating, deleting, updating users.
 - Authentication and authorization with JWT.
 - Confirming user through email.
 - Changing password with confirming action by following the link, sended onto email.
 
 ProductService implements:
+- CQRS, and Clean Architecture with using Best Pricties.
+- Developing CQRS with using MediatR, FluentValidation.
 - RESTful API for reading, creating, deleting, updating users.
 - Searching and filtering products via price and creation date parameters.
 - Only authorized users may perfrm actions on products. They may manipulate only their products properties.
